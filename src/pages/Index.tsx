@@ -1,11 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCloudTradeStore, calcStats } from '@/store/useCloudTradeStore';
+import { useNotesStore } from '@/store/useNotesStore';
 import { StatsBar } from '@/components/StatsBar';
 import { TradeForm } from '@/components/TradeForm';
 import { TradeCard } from '@/components/TradeCard';
 import { IdentitySelector } from '@/components/IdentitySelector';
 import { ComparisonView } from '@/components/ComparisonView';
+import { TradeNotesPanel } from '@/components/TradeNotesPanel';
 import { AuthPage } from '@/components/AuthPage';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,6 +18,7 @@ type Filter = 'all' | 'open' | 'closed';
 
 function Dashboard({ user }: { user: User }) {
   const store = useCloudTradeStore(user);
+  const notesStore = useNotesStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
 
@@ -74,6 +77,14 @@ function Dashboard({ user }: { user: User }) {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <TradeNotesPanel
+          notes={notesStore.notes}
+          loading={notesStore.loading}
+          onAdd={notesStore.addNote}
+          onUpdate={notesStore.updateNote}
+          onDelete={notesStore.deleteNote}
+          identityName={store.activeIdentity?.name}
+        />
         <StatsBar trades={store.activeTrades} />
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-1">

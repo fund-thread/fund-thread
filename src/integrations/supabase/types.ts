@@ -85,6 +85,50 @@ export type Database = {
           },
         ]
       }
+      trade_notes: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          identity_id: string
+          is_pinned: boolean
+          priority: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          id?: string
+          identity_id: string
+          is_pinned?: boolean
+          priority?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          identity_id?: string
+          is_pinned?: boolean
+          priority?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trade_notes_identity_id_fkey"
+            columns: ["identity_id"]
+            isOneToOne: false
+            referencedRelation: "identities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trades: {
         Row: {
           buy_date: string
