@@ -20,6 +20,7 @@ import type { User } from '@supabase/supabase-js';
 type Filter = 'all' | 'open' | 'closed';
 
 function Dashboard({ user }: { user: User }) {
+  const navigate = useNavigate();
   const store = useCloudTradeStore(user);
   const notesStore = useNotesStore(user, store.activeIdentityId);
   const reviewStore = useReviewStore(user, store.activeIdentityId);
