@@ -4,7 +4,8 @@ import { calcPnL } from '@/store/useCloudTradeStore';
 import { ClosePositionDialog } from './ClosePositionDialog';
 import { EventForm } from './EventForm';
 import { EventTimeline } from './EventTimeline';
-import { Trash2, ChevronDown, ChevronUp, TrendingUp, TrendingDown } from 'lucide-react';
+import { KlineChart } from './KlineChart';
+import { Trash2, ChevronDown, ChevronUp, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
@@ -18,6 +19,7 @@ interface Props {
 
 export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const [showChart, setShowChart] = useState(false);
   const { amount, percent, isOpen } = calcPnL(trade);
   const isProfit = amount >= 0;
 
@@ -51,6 +53,10 @@ export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent 
           )}
         </div>
         <div className="flex items-center gap-1 shrink-0">
+          <Button variant="ghost" size="sm" className={`h-7 w-7 p-0 ${showChart ? 'text-primary' : 'text-muted-foreground'}`}
+            onClick={() => setShowChart(!showChart)} title="K线图">
+            <BarChart3 className="w-3.5 h-3.5" />
+          </Button>
           {isOpen && <ClosePositionDialog trade={trade} onClose={onClose} />}
           <EventForm onAdd={e => onAddEvent(trade.id, e)} />
           <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground hover:text-loss" onClick={() => onDelete(trade.id)}>
@@ -61,6 +67,13 @@ export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent 
           </Button>
         </div>
       </div>
+
+      {/* K-line Chart */}
+      {showChart && (
+        <div className="mt-3 pt-3 border-t border-border">
+          <KlineChart symbol={trade.symbol} name={trade.name} buyPrice={trade.buyPrice} sellPrice={trade.sellPrice} />
+        </div>
+      )}
 
       {expanded && (
         <div className="mt-3 pt-3 border-t border-border space-y-2">
