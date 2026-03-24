@@ -37,7 +37,7 @@ export function TradeForm({ identityId, onAdd }: Props) {
       buyDate: form.buyDate, buyPrice: Number(form.buyPrice), shares: Number(form.shares),
       buyReason: form.buyReason, strategy: form.strategy,
     });
-    setForm({ symbol: '', name: '', direction: 'long', buyDate: new Date().toISOString().slice(0, 10), buyPrice: '', shares: '', buyReason: '', strategy: 'trend' });
+    setForm({ symbol: '', name: '', direction: 'long', buyDate: new Date().toISOString().slice(0, 10), buyPrice: '', shares: '100', buyReason: '', strategy: 'trend' });
     setOpen(false);
   };
 
