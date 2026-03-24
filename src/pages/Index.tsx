@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCloudTradeStore, calcStats } from '@/store/useCloudTradeStore';
 import { useNotesStore } from '@/store/useNotesStore';
+import { useReviewStore } from '@/store/useReviewStore';
 import { StatsBar } from '@/components/StatsBar';
 import { TradeForm } from '@/components/TradeForm';
 import { TradeCard } from '@/components/TradeCard';
