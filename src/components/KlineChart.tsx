@@ -43,9 +43,13 @@ const IMPACT_MARKER_COLORS: Record<number, string> = {
 export function KlineChart({ symbol, name, buyPrice, sellPrice, events = [], onAddEvent }: Props) {
   const [data, setData] = useState<KlineData[]>([]);
   const [quote, setQuote] = useState<{ price: number; changePercent: number } | null>(null);
+  const [market, setMarket] = useState<'cn' | 'us'>('cn');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [period, setPeriod] = useState('daily');
+
+  const isUS = market === 'us';
+  const currency = isUS ? '$' : '¥';
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -58,6 +62,7 @@ export function KlineChart({ symbol, name, buyPrice, sellPrice, events = [], onA
       if (!res.success) throw new Error(res.error);
       setData(res.data || []);
       setQuote(res.quote || null);
+      if (res.market) setMarket(res.market);
     } catch (e: any) {
       setError(e.message || '获取数据失败');
     } finally {
