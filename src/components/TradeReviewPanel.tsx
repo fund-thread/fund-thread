@@ -379,9 +379,18 @@ function EditReviewDialog({ review, onUpdate, onClose }: {
   const [goals, setGoals] = useState(review.goals);
   const [rating, setRating] = useState(review.rating);
 
+  const hasChanges = summary !== review.summary || lessons !== review.lessons || goals !== review.goals || rating !== review.rating;
+
+  const handleClose = () => {
+    if (hasChanges) {
+      if (!window.confirm('修改尚未保存，确定退出吗？')) return;
+    }
+    onClose();
+  };
+
   return (
-    <Dialog open onOpenChange={v => { if (!v) onClose(); }}>
-      <DialogContent className="sm:max-w-lg bg-card border-border max-h-[90vh] overflow-y-auto">
+    <Dialog open onOpenChange={v => { if (!v) handleClose(); }}>
+      <DialogContent className="sm:max-w-lg bg-card border-border max-h-[90vh] overflow-y-auto" onPointerDownOutside={e => { if (hasChanges) e.preventDefault(); }} onEscapeKeyDown={e => { if (hasChanges) e.preventDefault(); handleClose(); }}>
         <DialogHeader>
           <DialogTitle className="font-display">编辑总结 · {review.periodLabel}</DialogTitle>
         </DialogHeader>
