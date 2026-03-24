@@ -119,6 +119,16 @@ function Dashboard({ user }: { user: User }) {
             ))
           )}
         </div>
+        <TradeReviewPanel
+          reviews={reviewStore.reviews}
+          trades={store.activeTrades}
+          identityId={store.activeIdentityId}
+          identityName={store.activeIdentity?.name}
+          loading={reviewStore.loading}
+          onAdd={reviewStore.addReview}
+          onUpdate={reviewStore.updateReview}
+          onDelete={reviewStore.deleteReview}
+        />
       </main>
     </div>
   );
