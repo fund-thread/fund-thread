@@ -123,7 +123,7 @@ export function KlineChart({ symbol, name, buyPrice, sellPrice, events = [], onA
       </div>
 
       <CandlestickCanvas data={data} buyPrice={buyPrice} sellPrice={sellPrice}
-        events={events} onAddEvent={onAddEvent} />
+        events={events} onAddEvent={onAddEvent} currency={currency} />
 
       <div className="flex gap-4 text-xs text-muted-foreground font-mono">
         <span>最高 ¥{Math.max(...data.map(d => d.high)).toFixed(2)}</span>
