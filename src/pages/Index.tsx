@@ -2,12 +2,14 @@ import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCloudTradeStore, calcStats } from '@/store/useCloudTradeStore';
 import { useNotesStore } from '@/store/useNotesStore';
+import { useReviewStore } from '@/store/useReviewStore';
 import { StatsBar } from '@/components/StatsBar';
 import { TradeForm } from '@/components/TradeForm';
 import { TradeCard } from '@/components/TradeCard';
 import { IdentitySelector } from '@/components/IdentitySelector';
 import { ComparisonView } from '@/components/ComparisonView';
 import { TradeNotesPanel } from '@/components/TradeNotesPanel';
+import { TradeReviewPanel } from '@/components/TradeReviewPanel';
 import { AuthPage } from '@/components/AuthPage';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -19,6 +21,7 @@ type Filter = 'all' | 'open' | 'closed';
 function Dashboard({ user }: { user: User }) {
   const store = useCloudTradeStore(user);
   const notesStore = useNotesStore(user, store.activeIdentityId);
+  const reviewStore = useReviewStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
 
@@ -85,6 +88,16 @@ function Dashboard({ user }: { user: User }) {
           onDelete={notesStore.deleteNote}
           onParseAttachment={notesStore.parseAttachment}
           identityName={store.activeIdentity?.name}
+        />
+        <TradeReviewPanel
+          reviews={reviewStore.reviews}
+          trades={store.activeTrades}
+          identityId={store.activeIdentityId}
+          identityName={store.activeIdentity?.name}
+          loading={reviewStore.loading}
+          onAdd={reviewStore.addReview}
+          onUpdate={reviewStore.updateReview}
+          onDelete={reviewStore.deleteReview}
         />
         <StatsBar trades={store.activeTrades} />
         <div className="flex items-center gap-3 flex-wrap">
