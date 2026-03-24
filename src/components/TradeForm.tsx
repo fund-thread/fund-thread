@@ -26,7 +26,11 @@ export function TradeForm({ identityId, onAdd }: Props) {
   });
 
   const handleSubmit = () => {
-    if (!form.symbol || !form.buyPrice || !form.shares) return;
+    console.log('handleSubmit called, form:', JSON.stringify(form));
+    if (!form.symbol || !form.buyPrice || !form.shares) {
+      console.log('Validation failed:', { symbol: form.symbol, buyPrice: form.buyPrice, shares: form.shares });
+      return;
+    }
     onAdd({
       identityId, symbol: form.symbol, name: form.name, direction: form.direction,
       buyDate: form.buyDate, buyPrice: Number(form.buyPrice), shares: Number(form.shares),
