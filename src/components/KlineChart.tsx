@@ -102,7 +102,7 @@ export function KlineChart({ symbol, name, buyPrice, sellPrice, events = [], onA
           <span className="font-mono text-sm font-medium">{symbol} {name}</span>
           {quote && (
             <span className={`font-mono text-sm font-semibold ${quote.changePercent >= 0 ? 'text-profit' : 'text-loss'}`}>
-              ¥{quote.price.toFixed(2)}
+              {currency}{quote.price.toFixed(2)}
               <span className="ml-1 text-xs">
                 {quote.changePercent >= 0 ? '+' : ''}{quote.changePercent.toFixed(2)}%
               </span>
