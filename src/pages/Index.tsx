@@ -18,6 +18,7 @@ type Filter = 'all' | 'open' | 'closed';
 
 function Dashboard({ user }: { user: User }) {
   const store = useCloudTradeStore(user);
+  const notesStore = useNotesStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
 
