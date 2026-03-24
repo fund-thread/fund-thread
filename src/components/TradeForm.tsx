@@ -45,7 +45,7 @@ export function TradeForm({ identityId, onAdd }: Props) {
       <DialogTrigger asChild>
         <Button className="gap-2"><Plus className="w-4 h-4" />新建交易</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg bg-card border-border">
+      <DialogContent className="sm:max-w-lg bg-card border-border max-h-[90vh] overflow-y-auto">
         <DialogHeader><DialogTitle className="font-display text-xl">新建交易记录</DialogTitle></DialogHeader>
         <div className="grid gap-4 py-2">
           <div className="grid grid-cols-2 gap-3">
@@ -74,7 +74,7 @@ export function TradeForm({ identityId, onAdd }: Props) {
             <div><Label>股数</Label><Input type="number" value={form.shares} onChange={e => setForm(f => ({ ...f, shares: e.target.value }))} placeholder="100" /></div>
           </div>
           <div><Label>买入理由</Label><Textarea value={form.buyReason} onChange={e => setForm(f => ({ ...f, buyReason: e.target.value }))} placeholder="简述买入逻辑..." rows={3} /></div>
-          <Button onClick={handleSubmit} className="w-full">确认建仓</Button>
+          <Button type="button" onClick={handleSubmit} className="w-full">确认建仓</Button>
         </div>
       </DialogContent>
     </Dialog>
