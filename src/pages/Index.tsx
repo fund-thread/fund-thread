@@ -72,6 +72,9 @@ function Dashboard({ user }: { user: User }) {
             )}
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate('/ai-assistant')} className="gap-1.5">
+              <Bot className="w-4 h-4" /> 策略助手
+            </Button>
             <ComparisonView identities={store.identities} trades={store.trades} />
             {store.activeIdentityId && <TradeForm identityId={store.activeIdentityId} onAdd={store.addTrade} />}
             <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => supabase.auth.signOut()}>
