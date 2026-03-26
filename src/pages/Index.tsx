@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useCloudTradeStore, calcStats } from '@/store/useCloudTradeStore';
+import { useCloudTradeStore, calcStats, mergePositions } from '@/store/useCloudTradeStore';
 import { useNotesStore } from '@/store/useNotesStore';
 import { useReviewStore } from '@/store/useReviewStore';
 import { StatsBar } from '@/components/StatsBar';
