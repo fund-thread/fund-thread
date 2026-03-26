@@ -27,6 +27,9 @@ function Dashboard({ user }: { user: User }) {
   const reviewStore = useReviewStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
+  const [showMerged, setShowMerged] = useState(false);
+
+  const mergedPositions = useMemo(() => mergePositions(store.activeTrades), [store.activeTrades]);
 
   // Auto-create default identity if none exist
   useEffect(() => {
