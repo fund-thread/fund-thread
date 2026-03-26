@@ -34,6 +34,7 @@ export function useCloudTradeStore(user: User) {
       buyReason: r.buy_reason ?? '', strategy: r.strategy as StrategyTag,
       sellDate: r.sell_date ?? undefined, sellPrice: r.sell_price != null ? Number(r.sell_price) : undefined,
       sellReason: r.sell_reason ?? undefined,
+      currency: ((r as any).currency as Currency) || 'CNY',
       events: events.filter(e => (evRes.data ?? []).find(er => er.id === e.id)?.trade_id === r.id),
       createdAt: r.created_at, updatedAt: r.updated_at,
     }));
