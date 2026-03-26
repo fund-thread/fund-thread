@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { AppState, Trade, Identity, TradeEvent, TradeDirection, StrategyTag, EventType, ImpactLevel } from '@/types/trade';
+import type { AppState, Trade, Identity, TradeEvent, TradeDirection, StrategyTag, EventType, ImpactLevel, Currency, MergedPosition } from '@/types/trade';
 import type { User } from '@supabase/supabase-js';
 
 export function useCloudTradeStore(user: User) {
@@ -34,6 +34,7 @@ export function useCloudTradeStore(user: User) {
       buyReason: r.buy_reason ?? '', strategy: r.strategy as StrategyTag,
       sellDate: r.sell_date ?? undefined, sellPrice: r.sell_price != null ? Number(r.sell_price) : undefined,
       sellReason: r.sell_reason ?? undefined,
+      currency: ((r as any).currency as Currency) || 'CNY',
       events: events.filter(e => (evRes.data ?? []).find(er => er.id === e.id)?.trade_id === r.id),
       createdAt: r.created_at, updatedAt: r.updated_at,
     }));
@@ -74,13 +75,15 @@ export function useCloudTradeStore(user: User) {
       user_id: user.id, identity_id: trade.identityId, symbol: trade.symbol, name: trade.name,
       direction: trade.direction, buy_date: trade.buyDate, buy_price: trade.buyPrice,
       shares: trade.shares, buy_reason: trade.buyReason, strategy: trade.strategy,
-    }).select().single();
+      currency: trade.currency,
+    } as any).select().single();
     if (data) {
       const newTrade: Trade = {
         id: data.id, identityId: data.identity_id, symbol: data.symbol, name: data.name,
         direction: data.direction as TradeDirection, buyDate: data.buy_date,
         buyPrice: Number(data.buy_price), shares: Number(data.shares),
         buyReason: data.buy_reason ?? '', strategy: data.strategy as StrategyTag,
+        currency: ((data as any).currency as Currency) || 'CNY',
         events: [], createdAt: data.created_at, updatedAt: data.updated_at,
       };
       setTrades(prev => [newTrade, ...prev]);
@@ -153,4 +156,28 @@ export function calcStats(trades: Trade[]) {
   });
   const winRate = closedTrades.length > 0 ? (wins / closedTrades.length) * 100 : 0;
   return { total, openCount: openTrades.length, closedCount: closedTrades.length, totalPnL, winRate };
+}
+
+export function mergePositions(trades: Trade[]): MergedPosition[] {
+  const openTrades = trades.filter(t => !t.sellPrice);
+  const grouped: Record<string, Trade[]> = {};
+  openTrades.forEach(t => {
+    const key = `${t.symbol}_${t.direction}`;
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(t);
+  });
+  return Object.values(grouped).map(group => {
+    const totalShares = group.reduce((s, t) => s + t.shares, 0);
+    const totalCost = group.reduce((s, t) => s + t.buyPrice * t.shares, 0);
+    return {
+      symbol: group[0].symbol,
+      name: group[0].name,
+      currency: group[0].currency,
+      direction: group[0].direction,
+      totalShares,
+      avgPrice: totalCost / totalShares,
+      totalCost,
+      trades: group,
+    };
+  });
 }

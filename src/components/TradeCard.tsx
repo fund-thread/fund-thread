@@ -1,5 +1,5 @@
 import type { Trade, TradeEvent } from '@/types/trade';
-import { STRATEGY_LABELS } from '@/types/trade';
+import { STRATEGY_LABELS, CURRENCY_SYMBOLS } from '@/types/trade';
 import { calcPnL } from '@/store/useCloudTradeStore';
 import { ClosePositionDialog } from './ClosePositionDialog';
 import { EventForm } from './EventForm';
@@ -22,6 +22,7 @@ export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent 
   const [showChart, setShowChart] = useState(false);
   const { amount, percent, isOpen } = calcPnL(trade);
   const isProfit = amount >= 0;
+  const cs = CURRENCY_SYMBOLS[trade.currency] || '¥';
 
   return (
     <div className="bg-card border border-border rounded-lg p-4 hover:border-primary/30 transition-colors">
@@ -41,9 +42,9 @@ export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent 
             )}
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4 text-xs text-muted-foreground font-mono">
-            <span>买入 {trade.buyDate} @ ¥{trade.buyPrice.toFixed(2)} × {trade.shares}股</span>
+            <span>买入 {trade.buyDate} @ {cs}{trade.buyPrice.toFixed(2)} × {trade.shares}股</span>
             {!isOpen && trade.sellDate && (
-              <span>卖出 {trade.sellDate} @ ¥{trade.sellPrice?.toFixed(2)}</span>
+              <span>卖出 {trade.sellDate} @ {cs}{trade.sellPrice?.toFixed(2)}</span>
             )}
           </div>
           {!isOpen && (
