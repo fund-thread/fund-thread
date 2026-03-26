@@ -75,13 +75,15 @@ export function useCloudTradeStore(user: User) {
       user_id: user.id, identity_id: trade.identityId, symbol: trade.symbol, name: trade.name,
       direction: trade.direction, buy_date: trade.buyDate, buy_price: trade.buyPrice,
       shares: trade.shares, buy_reason: trade.buyReason, strategy: trade.strategy,
-    }).select().single();
+      currency: trade.currency,
+    } as any).select().single();
     if (data) {
       const newTrade: Trade = {
         id: data.id, identityId: data.identity_id, symbol: data.symbol, name: data.name,
         direction: data.direction as TradeDirection, buyDate: data.buy_date,
         buyPrice: Number(data.buy_price), shares: Number(data.shares),
         buyReason: data.buy_reason ?? '', strategy: data.strategy as StrategyTag,
+        currency: ((data as any).currency as Currency) || 'CNY',
         events: [], createdAt: data.created_at, updatedAt: data.updated_at,
       };
       setTrades(prev => [newTrade, ...prev]);
