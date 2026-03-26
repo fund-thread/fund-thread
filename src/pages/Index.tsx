@@ -9,6 +9,7 @@ import { TradeForm } from '@/components/TradeForm';
 import { TradeCard } from '@/components/TradeCard';
 import { IdentitySelector } from '@/components/IdentitySelector';
 import { ComparisonView } from '@/components/ComparisonView';
+import { MergedPositionsPanel } from '@/components/MergedPositionsPanel';
 import { TradeNotesPanel } from '@/components/TradeNotesPanel';
 import { TradeReviewPanel } from '@/components/TradeReviewPanel';
 import { AuthPage } from '@/components/AuthPage';
