@@ -65,9 +65,21 @@ export interface Trade {
   sellDate?: string;
   sellPrice?: number;
   sellReason?: string;
+  currency: Currency;
   events: TradeEvent[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface MergedPosition {
+  symbol: string;
+  name: string;
+  currency: Currency;
+  direction: TradeDirection;
+  totalShares: number;
+  avgPrice: number;
+  totalCost: number;
+  trades: Trade[];
 }
 
 export interface Identity {
