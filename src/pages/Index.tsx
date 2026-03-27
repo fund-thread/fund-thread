@@ -28,6 +28,7 @@ function Dashboard({ user }: { user: User }) {
   const store = useCloudTradeStore(user);
   const notesStore = useNotesStore(user, store.activeIdentityId);
   const reviewStore = useReviewStore(user, store.activeIdentityId);
+  const orderStore = useOrderStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
   const [showMerged, setShowMerged] = useState(false);
