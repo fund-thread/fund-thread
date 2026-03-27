@@ -19,7 +19,7 @@ interface Props {
   onDeleteEvent: (tradeId: string, eventId: string) => void;
 }
 
-export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent }: Props) {
+export function TradeCard({ trade, onClose, onUpdate, onDelete, onAddEvent, onDeleteEvent }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [showChart, setShowChart] = useState(false);
   const { amount, percent, isOpen } = calcPnL(trade);
