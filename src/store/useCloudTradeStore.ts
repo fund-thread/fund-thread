@@ -90,6 +90,23 @@ export function useCloudTradeStore(user: User) {
     }
   }, [user.id]);
 
+  const updateTrade = useCallback(async (id: string, updates: Partial<Pick<Trade, 'symbol' | 'name' | 'direction' | 'buyDate' | 'buyPrice' | 'shares' | 'buyReason' | 'strategy' | 'currency'>>) => {
+    const dbUpdates: Record<string, any> = { updated_at: new Date().toISOString() };
+    if (updates.symbol !== undefined) dbUpdates.symbol = updates.symbol;
+    if (updates.name !== undefined) dbUpdates.name = updates.name;
+    if (updates.direction !== undefined) dbUpdates.direction = updates.direction;
+    if (updates.buyDate !== undefined) dbUpdates.buy_date = updates.buyDate;
+    if (updates.buyPrice !== undefined) dbUpdates.buy_price = updates.buyPrice;
+    if (updates.shares !== undefined) dbUpdates.shares = updates.shares;
+    if (updates.buyReason !== undefined) dbUpdates.buy_reason = updates.buyReason;
+    if (updates.strategy !== undefined) dbUpdates.strategy = updates.strategy;
+    if (updates.currency !== undefined) dbUpdates.currency = updates.currency;
+    await supabase.from('trades').update(dbUpdates).eq('id', id);
+    setTrades(prev => prev.map(t =>
+      t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t
+    ));
+  }, []);
+
   const closeTrade = useCallback(async (id: string, sellDate: string, sellPrice: number, sellReason: string) => {
     await supabase.from('trades').update({ sell_date: sellDate, sell_price: sellPrice, sell_reason: sellReason }).eq('id', id);
     setTrades(prev => prev.map(t =>
