@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useCloudTradeStore, calcStats, mergePositions } from '@/store/useCloudTradeStore';
 import { useNotesStore } from '@/store/useNotesStore';
 import { useReviewStore } from '@/store/useReviewStore';
+import { useOrderStore } from '@/store/useOrderStore';
 import { StatsBar } from '@/components/StatsBar';
 import { TradeForm } from '@/components/TradeForm';
 import { TradeCard } from '@/components/TradeCard';
@@ -11,6 +12,7 @@ import { IdentitySelector } from '@/components/IdentitySelector';
 import { ComparisonView } from '@/components/ComparisonView';
 import { MergedPositionsPanel } from '@/components/MergedPositionsPanel';
 import { TradeNotesPanel } from '@/components/TradeNotesPanel';
+import { ArticleOrderPanel } from '@/components/ArticleOrderPanel';
 import { TradeReviewPanel } from '@/components/TradeReviewPanel';
 import { AuthPage } from '@/components/AuthPage';
 import { Input } from '@/components/ui/input';
@@ -26,6 +28,7 @@ function Dashboard({ user }: { user: User }) {
   const store = useCloudTradeStore(user);
   const notesStore = useNotesStore(user, store.activeIdentityId);
   const reviewStore = useReviewStore(user, store.activeIdentityId);
+  const orderStore = useOrderStore(user, store.activeIdentityId);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
   const [showMerged, setShowMerged] = useState(false);
@@ -90,6 +93,18 @@ function Dashboard({ user }: { user: User }) {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <ArticleOrderPanel
+          orders={orderStore.orders}
+          logs={orderStore.logs}
+          pendingOrders={orderStore.pendingOrders}
+          loading={orderStore.loading}
+          onAddOrders={orderStore.addOrders}
+          onCancel={orderStore.cancelOrder}
+          onExecute={orderStore.executeOrder}
+          onParseArticle={orderStore.parseArticle}
+          onReload={orderStore.reload}
+          identityName={store.activeIdentity?.name}
+        />
         <TradeNotesPanel
           notes={notesStore.notes}
           loading={notesStore.loading}
