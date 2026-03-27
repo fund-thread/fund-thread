@@ -60,6 +60,7 @@ export function TradeCard({ trade, onClose, onUpdate, onDelete, onAddEvent, onDe
             onClick={() => setShowChart(!showChart)} title="K线图">
             <BarChart3 className="w-3.5 h-3.5" />
           </Button>
+          {isOpen && <EditTradeDialog trade={trade} onUpdate={onUpdate} />}
           {isOpen && <ClosePositionDialog trade={trade} onClose={onClose} />}
           <EventForm onAdd={e => onAddEvent(trade.id, e)} />
           <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground hover:text-loss" onClick={() => onDelete(trade.id)}>
