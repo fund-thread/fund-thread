@@ -224,7 +224,9 @@ function CandlestickCanvas({ data, buyPrice, sellPrice, events, onAddEvent, curr
         {data.map((d, i) => {
           const x = padding.left + i * gap + gap / 2;
           const isUp = d.close >= d.open;
-          const color = isUp ? 'var(--profit)' : 'var(--loss)';
+          const upColor = '#ef4444';   // 红色涨
+          const downColor = '#22c55e'; // 绿色跌
+          const color = isUp ? upColor : downColor;
           const bodyTop = yPrice(Math.max(d.open, d.close));
           const bodyBot = yPrice(Math.min(d.open, d.close));
           const bodyH = Math.max(1, bodyBot - bodyTop);
@@ -234,10 +236,10 @@ function CandlestickCanvas({ data, buyPrice, sellPrice, events, onAddEvent, curr
               <line x1={x} x2={x} y1={yPrice(d.high)} y2={yPrice(d.low)}
                 stroke={color} strokeWidth={1} />
               <rect x={x - candleW / 2} y={bodyTop} width={candleW} height={bodyH}
-                fill={isUp ? 'transparent' : color} stroke={color} strokeWidth={1} rx={0.5} />
+                fill={isUp ? color : 'transparent'} stroke={color} strokeWidth={1} rx={0.5} />
               <rect x={x - candleW / 2} y={yVol(d.volume)} width={candleW}
                 height={volBaseY + volHeight - yVol(d.volume)}
-                fill={color} fillOpacity={0.3} />
+                fill={color} fillOpacity={0.35} />
             </g>
           );
         })}
