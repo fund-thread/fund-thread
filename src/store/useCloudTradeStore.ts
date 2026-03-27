@@ -148,7 +148,7 @@ export function useCloudTradeStore(user: User) {
   return {
     identities, trades, activeIdentityId, activeIdentity, activeTrades, loading,
     setActiveIdentity: setActiveIdentityId,
-    addIdentity, deleteIdentity, addTrade, closeTrade, deleteTrade, addEvent, deleteEvent,
+    addIdentity, deleteIdentity, addTrade, updateTrade, closeTrade, deleteTrade, addEvent, deleteEvent,
   };
 }
 
