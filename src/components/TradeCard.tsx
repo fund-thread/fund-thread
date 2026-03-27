@@ -1,7 +1,8 @@
-import type { Trade, TradeEvent } from '@/types/trade';
+import type { Trade, TradeEvent, TradeDirection, StrategyTag, Currency } from '@/types/trade';
 import { STRATEGY_LABELS, CURRENCY_SYMBOLS } from '@/types/trade';
 import { calcPnL } from '@/store/useCloudTradeStore';
 import { ClosePositionDialog } from './ClosePositionDialog';
+import { EditTradeDialog } from './EditTradeDialog';
 import { EventForm } from './EventForm';
 import { EventTimeline } from './EventTimeline';
 import { KlineChart } from './KlineChart';
@@ -12,12 +13,13 @@ import { useState } from 'react';
 interface Props {
   trade: Trade;
   onClose: (id: string, sellDate: string, sellPrice: number, sellReason: string) => void;
+  onUpdate: (id: string, updates: Partial<Pick<Trade, 'symbol' | 'name' | 'direction' | 'buyDate' | 'buyPrice' | 'shares' | 'buyReason' | 'strategy' | 'currency'>>) => void;
   onDelete: (id: string) => void;
   onAddEvent: (tradeId: string, event: Omit<TradeEvent, 'id'>) => void;
   onDeleteEvent: (tradeId: string, eventId: string) => void;
 }
 
-export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent }: Props) {
+export function TradeCard({ trade, onClose, onUpdate, onDelete, onAddEvent, onDeleteEvent }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [showChart, setShowChart] = useState(false);
   const { amount, percent, isOpen } = calcPnL(trade);
@@ -58,6 +60,7 @@ export function TradeCard({ trade, onClose, onDelete, onAddEvent, onDeleteEvent 
             onClick={() => setShowChart(!showChart)} title="K线图">
             <BarChart3 className="w-3.5 h-3.5" />
           </Button>
+          {isOpen && <EditTradeDialog trade={trade} onUpdate={onUpdate} />}
           {isOpen && <ClosePositionDialog trade={trade} onClose={onClose} />}
           <EventForm onAdd={e => onAddEvent(trade.id, e)} />
           <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground hover:text-loss" onClick={() => onDelete(trade.id)}>
