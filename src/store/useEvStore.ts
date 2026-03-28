@@ -245,9 +245,9 @@ export function useEvStore(user: User) {
     }).select().single();
     if (data) setErrors(prev => [{
       id: data.id, errorType: (data as any).error_type, occurredAt: (data as any).occurred_at,
-      symbol: (data as any).symbol, lossEstimate: (data as any).loss_estimate ? Number((data as any).loss_estimate) : undefined,
-      lesson: (data as any).lesson, isRevoked: (data as any).is_revoked, createdAt: (data as any).created_at,
-    }, ...prev]);
+      symbol: d.symbol, lossEstimate: d.loss_estimate ? Number(d.loss_estimate) : undefined,
+      lesson: d.lesson, isRevoked: d.is_revoked, createdAt: d.created_at,
+    }, ...prev]); }
   }, [user.id]);
 
   const revokeError = useCallback(async (id: string) => {
