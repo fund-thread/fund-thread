@@ -17,7 +17,7 @@ import { TradeReviewPanel } from '@/components/TradeReviewPanel';
 import { AuthPage } from '@/components/AuthPage';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, LogOut, Loader2, Bot, Layers } from 'lucide-react';
+import { Search, LogOut, Loader2, Bot, Layers, TrendingUp } from 'lucide-react';
 import { CURRENCY_SYMBOLS } from '@/types/trade';
 import type { User } from '@supabase/supabase-js';
 
@@ -70,6 +70,9 @@ function Dashboard({ user }: { user: User }) {
               <span className="text-primary">Trade</span>Journal
             </h1>
             <div className="flex items-center gap-1.5">
+              <Button variant="outline" size="sm" onClick={() => navigate('/ev')} className="gap-1 px-2 sm:px-3">
+                <TrendingUp className="w-4 h-4" /> <span className="hidden sm:inline">EV系统</span>
+              </Button>
               <Button variant="outline" size="sm" onClick={() => navigate('/ai-assistant')} className="gap-1 px-2 sm:px-3">
                 <Bot className="w-4 h-4" /> <span className="hidden sm:inline">策略助手</span>
               </Button>
