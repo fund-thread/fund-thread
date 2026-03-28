@@ -168,8 +168,8 @@ export function useEvStore(user: User) {
       sell_tier1_price: h.sellTier1Price, sell_tier2_price: h.sellTier2Price, sell_tier3_price: h.sellTier3Price,
       disposal_plan: h.disposalPlan,
     }).select().single();
-    if (data) setHoldings(prev => [...prev, mapHolding(data)]);
-    return data?.id;
+    if (data) setHoldings(prev => [...prev, mapHolding(data as any)]);
+    return (data as any)?.id;
   }, [user.id]);
 
   const updateHolding = useCallback(async (id: string, updates: Record<string, any>) => {
