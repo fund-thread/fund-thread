@@ -16,7 +16,7 @@ import { SentimentDashboard } from '@/components/SentimentDashboard';
 import { AuthPage } from '@/components/AuthPage';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, LogOut, Loader2, Bot, Layers, TrendingUp } from 'lucide-react';
+import { Search, LogOut, Loader2, Bot, Layers, TrendingUp, BookOpen } from 'lucide-react';
 import { CURRENCY_SYMBOLS } from '@/types/trade';
 import type { User } from '@supabase/supabase-js';
 
@@ -68,9 +68,6 @@ function Dashboard({ user }: { user: User }) {
               <span className="text-primary">Trade</span>Journal
             </h1>
             <div className="flex items-center gap-1.5">
-              <Button variant="outline" size="sm" onClick={() => navigate('/ev')} className="gap-1 px-2 sm:px-3">
-                <TrendingUp className="w-4 h-4" /> <span className="hidden sm:inline">EV系统</span>
-              </Button>
               <Button variant="outline" size="sm" onClick={() => navigate('/ai-assistant')} className="gap-1 px-2 sm:px-3">
                 <Bot className="w-4 h-4" /> <span className="hidden sm:inline">策略助手</span>
               </Button>
@@ -94,6 +91,46 @@ function Dashboard({ user }: { user: User }) {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={() => navigate('/ev')}
+            className="flex items-center gap-4 p-5 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all text-left group"
+          >
+            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-semibold text-base text-foreground">EV 期望值系统</div>
+              <div className="text-sm text-muted-foreground mt-0.5">量化评估交易期望收益</div>
+            </div>
+          </button>
+          <button
+            onClick={() => document.getElementById('trade-review-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="flex items-center gap-4 p-5 rounded-xl border border-border bg-card hover:border-primary/50 hover:shadow-md transition-all text-left group"
+          >
+            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-amber-500/10 text-amber-500 shrink-0 group-hover:bg-amber-500/20 transition-colors">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-semibold text-base text-foreground">交易复盘与总结</div>
+              <div className="text-sm text-muted-foreground mt-0.5">定期回顾交易表现与心得</div>
+            </div>
+          </button>
+        </div>
+
+        <div id="trade-review-section">
+          <TradeReviewPanel
+            reviews={reviewStore.reviews}
+            trades={store.activeTrades}
+            identityId={store.activeIdentityId}
+            identityName={store.activeIdentity?.name}
+            loading={reviewStore.loading}
+            onAdd={reviewStore.addReview}
+            onUpdate={reviewStore.updateReview}
+            onDelete={reviewStore.deleteReview}
+          />
+        </div>
+
         <TradeNotesPanel
           notes={notesStore.notes}
           loading={notesStore.loading}
@@ -142,16 +179,6 @@ function Dashboard({ user }: { user: User }) {
             ))
           )}
         </div>
-        <TradeReviewPanel
-          reviews={reviewStore.reviews}
-          trades={store.activeTrades}
-          identityId={store.activeIdentityId}
-          identityName={store.activeIdentity?.name}
-          loading={reviewStore.loading}
-          onAdd={reviewStore.addReview}
-          onUpdate={reviewStore.updateReview}
-          onDelete={reviewStore.deleteReview}
-        />
       </main>
     </div>
   );
