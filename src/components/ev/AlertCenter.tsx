@@ -318,6 +318,7 @@ function AlertSettings({ alert }: { alert: ReturnType<typeof useAlertStore> }) {
           { key: 'panicAlertEnabled', label: '市场恐慌提醒' },
           { key: 'earningsAlertEnabled', label: '财报提醒' },
           { key: 'dcaAlertEnabled', label: '定投提醒' },
+          { key: 'browserNotifyEnabled', label: '浏览器桌面通知（节点/恐慌）' },
         ].map(f => (
           <div key={f.key} className="flex items-center justify-between">
             <span className="text-sm">{f.label}</span>
