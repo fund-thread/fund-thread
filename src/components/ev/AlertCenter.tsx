@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RefreshCw, Send, Plus, Trash2, Bell, Settings, Calendar, Activity, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAlertStore, getSentimentLevel, type AlertSettings, type MarketSentiment, type EarningsEvent } from '@/store/useAlertStore';
+import { useAlertStore, getSentimentLevel, requestNotificationPermission, type AlertSettings, type MarketSentiment, type EarningsEvent } from '@/store/useAlertStore';
 import type { useEvStore } from '@/store/useEvStore';
 
 export function AlertCenter({ store }: { store: ReturnType<typeof useEvStore> }) {
@@ -318,10 +318,17 @@ function AlertSettings({ alert }: { alert: ReturnType<typeof useAlertStore> }) {
           { key: 'panicAlertEnabled', label: '市场恐慌提醒' },
           { key: 'earningsAlertEnabled', label: '财报提醒' },
           { key: 'dcaAlertEnabled', label: '定投提醒' },
+          { key: 'browserNotifyEnabled', label: '浏览器桌面通知（节点/恐慌）' },
         ].map(f => (
           <div key={f.key} className="flex items-center justify-between">
             <span className="text-sm">{f.label}</span>
-            <Switch checked={(s as any)[f.key]} onCheckedChange={v => update(f.key as keyof AlertSettingsType, v)} />
+            <Switch checked={(s as any)[f.key]} onCheckedChange={async v => {
+              if (f.key === 'browserNotifyEnabled' && v) {
+                const granted = await requestNotificationPermission();
+                if (!granted) { toast.error('浏览器通知权限被拒绝，请在浏览器设置中允许'); return; }
+              }
+              update(f.key as keyof AlertSettingsType, v);
+            }} />
           </div>
         ))}
         <div className="flex items-center gap-2 pt-2">

@@ -21,6 +21,7 @@ export interface AlertSettings {
   vixLevel3: number;
   nasdaqDropTrigger: number;
   fearGreedTrigger: number;
+  browserNotifyEnabled: boolean;
 }
 
 export interface MarketSentiment {
@@ -57,6 +58,7 @@ export interface AlertRecord {
 const DEFAULT_SETTINGS: AlertSettings = {
   emailjsServiceId: '', emailjsTemplateId: '', emailjsPublicKey: '', receiverEmail: '',
   nodeAlertEnabled: true, panicAlertEnabled: true, earningsAlertEnabled: true, dcaAlertEnabled: true,
+  browserNotifyEnabled: true,
   silentStart: 23, silentEnd: 8, dcaDay: 1,
   vixLevel1: 20, vixLevel2: 25, vixLevel3: 30,
   nasdaqDropTrigger: 15, fearGreedTrigger: 30,
@@ -129,6 +131,28 @@ async function sendEmail(settings: AlertSettings, subject: string, message: stri
   } catch (e) {
     console.error('EmailJS send failed:', e);
     return false;
+  }
+}
+
+// --- Browser notification helper ---
+export async function requestNotificationPermission(): Promise<boolean> {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') return false;
+  const result = await Notification.requestPermission();
+  return result === 'granted';
+}
+
+function sendBrowserNotification(title: string, body: string) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    new Notification(title, {
+      body: body.slice(0, 200),
+      icon: '/placeholder.svg',
+      tag: title, // deduplicate
+    });
+  } catch (e) {
+    console.error('Browser notification failed:', e);
   }
 }
 
@@ -236,10 +260,14 @@ export async function runAlertCheck(
     });
   }
 
-  // Save alerts and send emails
+  // Save alerts, send emails, and push browser notifications
   const db = (t: string) => supabase.from(t as any);
   for (const a of alerts) {
     const emailSent = await sendEmail(settings, a.title, a.content);
+    // Browser notification for node triggers and market panic
+    if (settings.browserNotifyEnabled && (a.type === 'node_trigger' || a.type === 'market_panic')) {
+      sendBrowserNotification(a.title, a.content);
+    }
     await db('ev_alert_history').insert({
       user_id: userId, alert_type: a.type, title: a.title,
       content: a.content, trigger_reason: a.reason, email_sent: emailSent,
