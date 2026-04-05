@@ -135,7 +135,7 @@ async function sendEmail(settings: AlertSettings, subject: string, message: stri
 }
 
 // --- Browser notification helper ---
-async function requestNotificationPermission(): Promise<boolean> {
+export async function requestNotificationPermission(): Promise<boolean> {
   if (!('Notification' in window)) return false;
   if (Notification.permission === 'granted') return true;
   if (Notification.permission === 'denied') return false;
