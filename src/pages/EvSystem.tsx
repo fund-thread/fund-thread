@@ -10,7 +10,8 @@ import { MonthlyReview } from '@/components/ev/MonthlyReview';
 import { ErrorLog } from '@/components/ev/ErrorLog';
 import { AuthPage } from '@/components/AuthPage';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Briefcase, Target, ShoppingCart, Wallet, FileText, AlertTriangle } from 'lucide-react';
+import { Loader2, ArrowLeft, Briefcase, Target, ShoppingCart, Wallet, FileText, AlertTriangle, Bell } from 'lucide-react';
+import { AlertCenter } from '@/components/ev/AlertCenter';
 import type { User } from '@supabase/supabase-js';
 
 const TABS = [
@@ -20,6 +21,7 @@ const TABS = [
   { key: 'dca', label: '定投', icon: Wallet },
   { key: 'review', label: '复盘', icon: FileText },
   { key: 'errors', label: '错误', icon: AlertTriangle },
+  { key: 'alerts', label: '提醒', icon: Bell },
 ] as const;
 
 type TabKey = typeof TABS[number]['key'];
@@ -63,6 +65,7 @@ function EvDashboard({ user }: { user: User }) {
           {tab === 'dca' && <DcaPlan store={store} />}
           {tab === 'review' && <MonthlyReview store={store} />}
           {tab === 'errors' && <ErrorLog store={store} />}
+          {tab === 'alerts' && <AlertCenter store={store} />}
         </div>
       </main>
 
