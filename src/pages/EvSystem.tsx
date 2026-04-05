@@ -21,6 +21,7 @@ const TABS = [
   { key: 'dca', label: '定投', icon: Wallet },
   { key: 'review', label: '复盘', icon: FileText },
   { key: 'errors', label: '错误', icon: AlertTriangle },
+  { key: 'alerts', label: '提醒', icon: Bell },
 ] as const;
 
 type TabKey = typeof TABS[number]['key'];
