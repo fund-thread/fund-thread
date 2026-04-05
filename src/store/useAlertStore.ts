@@ -132,6 +132,28 @@ async function sendEmail(settings: AlertSettings, subject: string, message: stri
   }
 }
 
+// --- Browser notification helper ---
+async function requestNotificationPermission(): Promise<boolean> {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') return false;
+  const result = await Notification.requestPermission();
+  return result === 'granted';
+}
+
+function sendBrowserNotification(title: string, body: string) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    new Notification(title, {
+      body: body.slice(0, 200),
+      icon: '/placeholder.svg',
+      tag: title, // deduplicate
+    });
+  } catch (e) {
+    console.error('Browser notification failed:', e);
+  }
+}
+
 // --- Check logic ---
 export interface CheckResult {
   alerts: Array<{ type: string; title: string; content: string; reason: string }>;
