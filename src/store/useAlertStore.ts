@@ -20,6 +20,7 @@ export interface AlertSettings {
   vixLevel2: number;
   vixLevel3: number;
   nasdaqDropTrigger: number;
+  fearGreedTrigger: number;
   browserNotifyEnabled: boolean;
 }
 
